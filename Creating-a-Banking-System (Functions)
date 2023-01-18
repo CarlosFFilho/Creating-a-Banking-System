@@ -1,0 +1,78 @@
+depositos = []
+saques = []
+extract = 0 #Saldo final
+
+numero_saques = 0
+
+print("Comandos: (a) Saque, (b) Depósito, (c) Ver extrato")
+print ("Para finalizar as ações digite FINALIZAR")
+
+acao = 0
+
+def cadastro_pessoal():
+    pessoa = input("Nome: ")
+    data_nascimento = input("Data(dd/mm/aa): ")
+    cpf = input("CPF: ")
+    endereço = input("Endereço(Logradouro,N°,Bairro,Cidade/Estado: ")
+    conta = input("Conta bancária: ")
+    
+
+def sacar_valor(valor_saque,numero_saques,extract):
+    if numero_saques < 3:
+        if valor_saque < 0 or valor_saque > 500:
+            print("Valor inválido!")
+        else:
+            if valor_saque <= extract:
+                numero_saques+=1
+                saques.append(valor_saque)
+                extract = extract - valor_saque
+            else:
+                print("Valor de saque é superior ao valor em conta!")
+    else:
+        print("Já foram realizados os 3 sauques permitidos!")
+    return numero_saques , extract
+            
+def depositar_valor(valor_deposito,extract):
+    if valor_deposito<0:
+        print("Valor inválido!")
+    else:
+        depositos.append(valor_deposito)
+        extract += valor_deposito
+    return extract
+            
+def visualizar_historico(extract):
+    if len(saques) == 0 and len(depositos)== 0:
+        print("Não foram realizadas movimentações")
+    else:
+        print("Saques")
+        for i in saques:
+            print ('R$%.2f' %(i))
+        print("-----")
+        print("Depósitos")
+        for r in depositos:
+            print ('R$%.2f' %(r))
+        print("-----")
+        print('SALDO FINAL: R$%.2f' %(extract))
+
+print("CADASTRO PESSOAL")
+retorno_cadastro = cadastro_pessoal()
+
+while acao != "FINALIZAR":
+    
+    print("Qual ação deseja realizar?")
+    acao = input("Comando: ")
+    
+    if acao == "a":
+        valor_saque = float(input("Valor de Saque: "))
+        retorno_saque = sacar_valor(valor_saque , numero_saques , extract)
+        numero_saques = retorno_saque [0]
+        extract = retorno_saque [1]
+        
+    elif acao == "b":
+        valor_deposito = float(input("Valor de Depósito: "))
+        extract = depositar_valor(valor_deposito , extract)
+        
+    elif acao == "c":
+        visualizar_historico(extract)
+    else:
+        print("Operação inválida!")
